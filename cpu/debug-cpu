@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#set -x
+
+while true; do
+	date
+	echo "==== check top ========================="
+	top -n 1 -b
+	echo "==== check pstree ========================="
+	pstree
+	echo "==== check ps aux ========================="
+	ps aux
+	sleep 1
+done
