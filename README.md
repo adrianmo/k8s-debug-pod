@@ -46,3 +46,23 @@ To check the status of `azure-cni-networkmonitor` this debug pod also mounts `/v
 ```console
 kubectl exec <debug-ebtables-pod> -it cat /var/log/azure-cnimonitor.log
 ```
+
+## Disk
+
+Check `iostat` every second and print results to stdout:
+
+```
+kubectl apply -f disk/debug-disk.yaml
+```
+
+The use `kubectl logs` to view the results.
+
+## CPU
+
+Check `top`, `pstree`, and `ps aux` every second print results to stdout.
+
+```
+kubectl apply -f cpu/debug-cpu.yaml
+```
+
+The use `kubectl logs` to view the results.
