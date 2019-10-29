@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#set -x
+
+while true; do
+	date
+	echo "==== check iostat ========================="
+	iostat
+	sleep 1
+done
