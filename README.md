@@ -81,4 +81,6 @@ kubectl logs -f sar-mddx5 -c sar-enable
 kubectl exec sar-mddx5 -c sar-collect -- sar -r -n DEV -f /var/log/sysstat
 ```
 
-If you're unfamiliar with the capabilities of SAR please check out the manpage.
+If you're unfamiliar with the capabilities of SAR please check out the manpage. For an overview of how SAR can be helpful, have a look at the wonderful functional diagram by Brendan Gregg:
+
+![SAR](linux_observability_sar)
