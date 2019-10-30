@@ -66,3 +66,19 @@ kubectl apply -f cpu/debug-cpu.yaml
 ```
 
 The use `kubectl logs` to view the results.
+
+## SAR
+
+This is a deamonset to enable SAR metric collection and to collect the resulting metrics.
+
+```
+kubectl apply -f sar/sar-statistics.yaml
+
+# wait for SAR to be enable and for log collection cycle to start. It will take two minutes.
+kubectl logs -f sar-mddx5 -c sar-enable
+
+# once you see output, you can use the collect container to run arbitrary commands:
+kubectl exec sar-mddx5 -c sar-collect -- sar -r -n DEV -f /var/log/sysstat
+```
+
+If you're unfamiliar with the capabilities of SAR please check out the manpage.

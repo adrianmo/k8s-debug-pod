@@ -20,7 +20,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: sar-enable
-        image: jemartin1993/k8s-debug-pod:sar-0.0.7
+        image: jemartin1993/k8s-debug-pod:sar-0.0.9
         command: ["/sar-enable"]
         securityContext:
           privileged: true
@@ -31,7 +31,7 @@ spec:
             cpu: 100m
             memory: 200Mi
       - name: sar-collect
-        image: jemartin1993/k8s-debug-pod:sar-0.0.6
+        image: jemartin1993/k8s-debug-pod:sar-0.0.9
         command: ["/sar-collect"]
         resources:
           limits:
