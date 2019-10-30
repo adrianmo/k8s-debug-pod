@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#set -x
+
+# Enable data collecting
+nsenter --target 1 --pid --mount --uts --ipc --net -- sh -c "sed -i 's/false/true/g' /etc/default/sysstat"
+
+# Set collection period to every minute
+nsenter --target 1 --pid --mount --uts --ipc --net -- sh -c "sed -i 's/5-55\/10/\*/g' /etc/cron.d/sysstat"
+
+# Restart service
+nsenter --target 1 --pid --mount --uts --ipc --net -- sh -c "systemctl stop sysstat"
+nsenter --target 1 --pid --mount --uts --ipc --net -- sh -c "systemctl start sysstat"
+
+# sleep until sar data has start to collect
+sleep 120
+
+echo "Files should be present in either /var/log/sysstat or /var/log/sa"

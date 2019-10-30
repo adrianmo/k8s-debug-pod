@@ -1,0 +1,4 @@
+FROM jhansen/k8s-debug-pod:0.1.0
+
+COPY sar/sar-enable /sar-enable
+COPY sar/sar-collect /sar-collect

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: sar
+  labels:
+    name: sar
+spec:
+  selector:
+    matchLabels:
+      name: sar
+  template:
+    metadata:
+      labels:
+        name: sar
+    spec:
+      hostPID: true
+      hostIPC: true
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: sar-enable
+        image: jemartin1993/k8s-debug-pod:sar-0.0.7
+        command: ["/sar-enable"]
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+      - name: sar-collect
+        image: jemartin1993/k8s-debug-pod:sar-0.0.6
+        command: ["/sar-collect"]
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        volumeMounts:
+          - name: logs
+            mountPath: /var/log
+            readOnly: true
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: logs
+          hostPath:
+            path: /var/log

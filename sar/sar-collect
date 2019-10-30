@@ -1,0 +1,5 @@
+#!/bin/bash
+
+#set -x
+
+while true; do sleep 86400; done
