@@ -12,8 +12,9 @@ LABEL org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.docker.dockerfile="/Dockerfile"
 
 RUN apk add --update ca-certificates \
- && apk add bash curl netcat-openbsd bind-tools net-tools \
+ && apk add bash curl jq netcat-openbsd bind-tools net-tools \
     openssl openssh iptables ebtables tcpdump tshark iproute2 \
+    conntrack-tools util-linux sysstat \
  && rm /var/cache/apk/*
 
 RUN \
@@ -55,3 +56,13 @@ RUN \
 RUN \
   ln -s /usr/local/bin/kubectl-v1.13.4 /usr/local/bin/kubectl; \
   ln -s /usr/local/bin/etcdctl-v3.1.8 /usr/local/bin/etcdctl
+
+# Copy all debug scripts
+
+COPY cpu/debug-cpu \
+     disk/debug-disk \
+     dns/debug-dns \
+     network/debug-conntrack \
+     sar/sar-enable \
+     sar/sar-collect \
+     /

@@ -1,3 +1,0 @@
-FROM jhansen/k8s-debug-pod:0.1.0
-
-COPY disk/debug-disk /debug-disk

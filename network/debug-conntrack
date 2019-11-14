@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -euo pipefail
+
+while true; do
+
+    nf_conntrack_max=$(cat /host/sys/net/netfilter/nf_conntrack_max)
+    nf_conntrack_count=$(cat /host/sys/net/netfilter/nf_conntrack_count)
+    insert_failed=$(conntrack -S | grep -oEi 'insert_failed=[0-9]+' | cut -d '=' -f 2 | awk '{s+=$1} END {print s}')
+    log=$( jq -nc \
+            --arg max "$nf_conntrack_max" \
+            --arg count "$nf_conntrack_count" \
+            --arg insert_failed "$insert_failed" \
+            '{nf_conntrack_max: $max, nf_conntrack_count: $count, insert_failed: $insert_failed}' )
+
+    echo "[$(date)] $log"
+
+    sleep "${POD_SLEEP_SECS}";
+done
