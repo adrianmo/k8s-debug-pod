@@ -33,6 +33,14 @@ kubectl -n default apply -f dns/sniff-dns.yaml
 
 Launches a pod in the host namespace with `NET_ADMIN`, runs `tshark -f udp port 53` to catch all DNS requests leaving the host.
 
+### Conntrack
+
+```console
+kubectl -n default apply -f network/debug-conntrack.yaml
+```
+
+Checks the Conntrack table current and max size, and aggregates the `insert_failed` counter on a loop of `POD_SLEEP_SECS`.
+
 ### Ebtables
 
 ```console
@@ -82,3 +90,13 @@ kubectl exec sar-mddx5 -c sar-collect -- sar -r -n DEV -f /var/log/sysstat
 ```
 
 If you're unfamiliar with the capabilities of SAR please check out the manpage. For an overview of how SAR can be helpful, have a look at the wonderful [functional diagram](http://www.brendangregg.com/Perf/linux_observability_sar) by Brendan Gregg. It'll help you know what commands to run depending on what situation that you're debugging.
+
+## Build the Docker image
+
+You can build your own Docker image.
+
+```
+IMAGE_NAME=jhansen/k8s-debug-pod:0.1.0
+
+docker build --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` -t $IMAGE_NAME .
+```
