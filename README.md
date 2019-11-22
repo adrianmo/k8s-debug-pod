@@ -96,7 +96,7 @@ If you're unfamiliar with the capabilities of SAR please check out the manpage. 
 You can build your own Docker image.
 
 ```
-IMAGE_NAME=jhansen/k8s-debug-pod:0.1.0
+IMAGE_NAME=adrianmo/k8s-debug-pod:0.1.0
 
 docker build --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` -t $IMAGE_NAME .
 ```

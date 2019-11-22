@@ -63,6 +63,7 @@ COPY cpu/debug-cpu \
      disk/debug-disk \
      dns/debug-dns \
      network/debug-conntrack \
+     network/debug-conntrack.jq \
      sar/sar-enable \
      sar/sar-collect \
      /
