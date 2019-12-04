@@ -1,10 +1,54 @@
 #!/bin/bash
 
-#set -x
+set -euo pipefail
+
+# Disks to monitor
+DISKS="sda sdb"
+
+# Application Insights URL
+APP_INSIGHTS_URL="https://dc.services.visualstudio.com/v2/track"
+
+# jq template file
+JQ_TEMPLATE="debug-disk.jq"
+
+send_metric() {
+	disk=$1
+    metric_name=$2
+    metric_value=$3
+
+	# --argjson to preserve numeric format in the JSON output
+    metric=$( jq -nc \
+				--arg iKey $INSTRUMENTATION_KEY \
+				--arg datetime $(date -u +"%Y-%m-%dT%H:%M:%SZ") \
+				--arg node_name $NODE_NAME \
+				--arg pod_name $POD_NAME \
+				--arg disk $disk \
+				--arg metric_name $metric_name \
+				--argjson metric_value $metric_value \
+				-f $JQ_TEMPLATE )
+	response=$(curl -Ss -d $metric $APP_INSIGHTS_URL)
+	errors=$(echo $response | jq -r '.errors | length')
+
+	if [ "$errors" -ne "0" ]; then
+		echo "[$(date)] ERROR: $response"
+	fi
+}
 
 while true; do
-	date
-	echo "==== check iostat ========================="
-	iostat
-	sleep 1
+
+	for disk in $DISKS; do
+		iops=$(iostat -dm ${disk} | grep "^${disk}" | awk '{ print $2; }')
+		mbps_read=$(iostat -dm ${disk} | grep "^${disk}" | awk '{ print $3; }')
+		mbps_write=$(iostat -dm ${disk} | grep "^${disk}" | awk '{ print $4; }')
+
+		echo "[$(date)] [${disk}] iops: $iops, mbps_read: $mbps_read, mbps_write: $mbps_write"
+
+		if [ ! -z "${INSTRUMENTATION_KEY-}" ]; then
+			send_metric $disk 'iops' $iops
+			send_metric $disk 'mbps_read' $mbps_read
+			send_metric $disk 'mbps_write' $mbps_write
+		fi
+	done
+
+	sleep "${POD_SLEEP_SECS}";
 done

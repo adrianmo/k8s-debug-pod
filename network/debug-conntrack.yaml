@@ -19,7 +19,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: debug
-        image: adrianmo/k8s-debug-pod:0.5.0
+        image: adrianmo/k8s-debug-pod:0.6.3
         imagePullPolicy: Always
         command: ["/debug-conntrack"]
         securityContext:

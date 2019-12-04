@@ -61,6 +61,7 @@ RUN \
 
 COPY cpu/debug-cpu \
      disk/debug-disk \
+     disk/debug-disk.jq \
      dns/debug-dns \
      network/debug-conntrack \
      network/debug-conntrack.jq \
